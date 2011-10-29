@@ -13,7 +13,6 @@
 	$.DeferredQueue = function(){
 		var queue = [];
 		var promise = null;
-		var added_callback = null;
 
 		function create(funcs){
 			var promises = build_promises(funcs);
