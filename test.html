@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script src="dfd_queue.js"></script>
+	<style type="text/css">
+		div { width:100px; height:100px; position:absolute; background:#3A3; }
+		#elem1 { top:50px; left:50px; }
+		#elem2 { top:50px; left:250px; }
+		
+	</style>
+	
+	<script>
+		function move_to(elem, pos){
+			return function(){
+				//console.debug('move', elem.attr('id'));
+				return elem.animate(pos, Math.random() * 5000);
+			};
+		}
+		
+		function fader(elem){
+			return function(){
+				var time = Math.random() * 5000;
+				return elem.fadeOut(time).delay(time / 2).fadeIn(time / 4);
+			};
+		}
+		
+		function mark_set(str) {
+			return function(){ console.debug(str); };
+		}
+		
+		var animator = $.DeferredQueue();
+		function animate(times){
+			var one = $('#elem1');
+			var two = $('#elem2');
+			animator.queue(
+				move_to(one, { top: 250, left: 250 }),
+				move_to(two, { top: 250, left: 50 }),
+				mark_set('one')
+				
+			)
+			animator.queue(
+				move_to(one, { top: 50, left: 50 }),
+				move_to(two, { top: 50, left: 250 }),
+				mark_set('two')
+				
+			)
+			animator.queue(
+				fader(one),
+				fader(two),
+				mark_set('three')
+				
+			)
+			animator.queue(
+				move_to(one, { top: 250, left: 250 }),
+				move_to(two, { top: 250, left: 50 }),
+				mark_set('four')
+				
+			)
+			animator.queue(
+				move_to(one, { top: 50, left: 50 }),
+				move_to(two, { top: 50, left: 250 }),
+				mark_set('five')
+				
+			)
+			animator.queue(function(){
+				console.log('the end');
+				
+			});
+		}
+		
+		$(function(){
+			$('button').click(function(){
+				animate();
+			});
+		})
+	</script>
+</head>
+<body>
+	<button>Go!</button>
+	<div id="elem1"></div>
+	<div id="elem2"></div>
+</body>
+</html>
