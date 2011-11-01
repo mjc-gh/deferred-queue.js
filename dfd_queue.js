@@ -48,10 +48,6 @@
 			
 			length:function(){
 				return queue.length;
-			},
-			
-			promise:function(){
-				return promise;
 			}
 		};
 	};	
