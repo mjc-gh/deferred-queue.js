@@ -1,4 +1,6 @@
 (function($){
+	var slice = Array.prototype.slice;
+	
 	function build_promises(args){
 		var promises = [];
 		
@@ -12,6 +14,8 @@
 
 	$.DeferredQueue = function(){
 		var creating = false;
+		var paused = false;
+		
 		var queue = [];
 		var promise = null;
 
@@ -21,6 +25,8 @@
 		}
 
 		function dequeue(){
+			if (paused) return;
+			
 			if (!queue.length)
 				promise = null;
 			else
@@ -29,7 +35,7 @@
 
 		return {
 			queue:function(){
-				var args = Array.prototype.slice.call(arguments);
+				var args = slice.call(arguments);
 				
 				if (promise && promise.isResolved())
 					promise = null;
@@ -44,6 +50,23 @@
 				}
 				
 				return this;
+			},
+			
+			pause:function(){
+				paused = true;
+			},
+			
+			resume:function(){
+				paused = false;
+				
+				dequeue();
+			},
+			
+			resumeWith:function(){
+				var args = slice.call(arguments);
+				queue.unshift(args);
+				
+				this.resume();
 			},
 			
 			length:function(){
