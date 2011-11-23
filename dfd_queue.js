@@ -37,7 +37,7 @@
 			queue:function(){
 				var args = slice.call(arguments);
 				
-				if (promise && promise.isResolved())
+				if (promise && promise.state() == 'resolved')
 					promise = null;
 					
 				if (promise || creating)
@@ -67,6 +67,14 @@
 				queue.unshift(args);
 				
 				this.resume();
+			},
+			
+			
+			state:function(){
+				if (promise)
+					return promise.state();
+				
+				return 'empty';
 			},
 			
 			length:function(){
