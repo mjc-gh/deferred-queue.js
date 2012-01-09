@@ -1,6 +1,8 @@
 jQuery Deferred Queue:
 
-Easily execute of sets of asynchronous JavaScript code. The queue can be paused and resume on demand.
+Easily execute sets of asynchronous JavaScript code. The queue can be paused and resume on demand.
+
+This especially useful when chaining together animations that may varying durations. 
 
 Example:
 
