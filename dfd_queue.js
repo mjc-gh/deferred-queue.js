@@ -6,7 +6,7 @@
 		
 		for (var i = 0; i < args.length; i++){
 			var fn = args[i];
-			promises.push(fn.call());
+			promises.push(fn.call ? fn.call() : fn);
 		}
 		
 		return promises;
@@ -20,6 +20,7 @@
 		var promise = null;
 
 		function create(funcs){
+			console.debug('create', funcs[0].id);
 			var promises = build_promises(funcs);
 			return $.when.apply($, promises).then(dequeue);
 		}
@@ -37,7 +38,7 @@
 			queue:function(){
 				var args = slice.call(arguments);
 				
-				if (promise && promise.state() == 'resolved')
+				if (promise && promise.state() == 'resolved' && !queue.length)
 					promise = null;
 					
 				if (promise || creating)
@@ -69,6 +70,12 @@
 				this.resume();
 			},
 			
+			replace:function(index){
+				var args = slice.call(arguments, 1);
+				queue[index] = args;
+				
+				return this;
+			},
 			
 			state:function(){
 				if (promise)
