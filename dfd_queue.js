@@ -20,7 +20,6 @@
 		var promise = null;
 
 		function create(funcs){
-			console.debug('create', funcs[0].id);
 			var promises = build_promises(funcs);
 			return $.when.apply($, promises).then(dequeue);
 		}
