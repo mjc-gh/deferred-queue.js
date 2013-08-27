@@ -12,7 +12,7 @@ Example:
     	// return a function that gets called when set is executed
     	return function(){
     		// function returns a promise
-    		elem.animate(pos, Math.random() * 5000);
+    		return elem.animate(pos, Math.random() * 5000);
     	}
     }
     
